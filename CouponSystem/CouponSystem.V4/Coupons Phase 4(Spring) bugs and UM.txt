@@ -1,0 +1,22 @@
+User manual:
+
+1) Start the apache-derby database (jdbc).
+2) Import the project CouponSystem4.zip to your workspace.
+
+If you didnt create DB in Project Phase 2:
+3) Go to src/main/java-> and run the class DBcreator to create the database.
+Companies:
+Name: Bitcoin, Password: btc.
+Name: Sony, Password: sony123.
+Name: LG, Password: 123.  
+
+Customers:
+Name: michael, password: 123.
+Name: eyal, password: eyal2.
+Name: nastya, password: m123.
+
+and 6 coupons 2 for each company no customer purchased a coupon yet.
+
+4) Run src/main/java-> CoupSysApplication.java as Java application. 
+5) Go to http://localhost:8091
+6) Have More fun :-)

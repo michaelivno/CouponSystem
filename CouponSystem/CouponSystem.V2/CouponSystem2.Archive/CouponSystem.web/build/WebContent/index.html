@@ -1,0 +1,419 @@
+ <!DOCTYPE html>
+<html>
+<head>
+<meta charset="windows-1255">
+<script type="text/javascript" src="js/angular.min.js"></script>
+<script type="text/javascript" src="js/angular-resource.min.js"></script>
+<script type="text/javascript" src="js/CouponSystem.js"></script>
+<link rel="stylesheet" href="css/couponSystem.css" />
+
+<title>Welcome and log-in</title>
+</head>
+<body>
+	<div ng-app="CouponSystemApplication"
+		ng-controller="CouponsController as p">
+		<h1 class="main">Welcome to Coupon System</h1>
+		<div ng-hide="p.hideLogin">
+			<div class="imgcontainer">
+				<img src="img/user.png" alt="Avatar" class="avatar">
+			</div>
+
+			<div class="container">
+				<label><b>Username:</b></label> <input id="loginInput" type="text"
+					ng-model="p.user.username" placeholder="Enter username here"
+					required><br> <label><b>Password:</b></label> <input
+					id="loginInput" ng-model="p.user.password" type="password"
+					placeholder="Enter password here" required><br />
+
+				<button ng-click="p.loginAdmin()">Login Admin</button>
+				<button ng-click="p.loginCompany()">Login Company</button>
+				<button ng-click="p.loginCustomer()">Login Customer</button>
+
+
+			</div>
+		</div>
+
+		<div ng-show="p.isLoggedInAdmin">
+			<h2>Admin Manage</h2>
+			<button ng-click="p.compCreate()">Create company</button>
+			<button ng-click="p.custCreate()">Create customer</button>
+			<br />
+			<div ng-show="p.cCompany">
+				<label> Company Name:<input ng-model="p.newComp.compName"><br />
+					Company Password:<input ng-model="p.newComp.password"><br />
+					Company email:<input ng-model="p.newComp.email"><br />
+					<button ng-click="p.createCompany(p.newComp)">Create Company</button>
+				</label>
+			</div>
+			<div ng-show="p.cCustomer">
+				<label> Customer Name:<input ng-model="p.newCust.custName"><br />
+					Customer Password:<input ng-model="p.newCust.password"><br />
+					<button ng-click="p.createCustomer(p.newCust)">Create
+						Customer</button>
+				</label>
+			</div>
+			<hr />
+			<label>Company Id: <input ng-model="p.CompReq.id" />
+			<button ng-click="p.getCompany()">GET</button>
+			</label>
+			<button ng-click="p.loadCompanies()">Get All Companies</button>
+			<div id="company" ng-repeat="company in p.allCompanies">
+				<b>Company Id:&nbsp;</b>{{company.id}}<br /> <b>Company
+					Name:&nbsp;</b> {{company.compName}}<br /> <b>Company
+					Password:&nbsp;</b> {{company.password}}<br /> <b>Company
+					Email:&nbsp;</b> {{company.email}}<br />
+				<button ng-click="p.removeCompany(company)">Remove</button>
+				<button ng-click="p.compUpdate(company)">Update</button>
+				<div ng-show="company.edit">
+					<label>New company Password: <input
+						ng-model="company.password" /></label> <label>New company Email:
+						<input ng-model="company.email" />
+					</label>
+					<button ng-click="p.compInvokeUpdate(company)">Update -
+						{{company.compName}}</button>
+					<button ng-click="p.loadCompaniesHelper()">Cancel</button>
+				</div>
+			</div>
+			<div ng-show="p.showGetCompay">
+				<b>Company Id:&nbsp;</b>{{p.company.id}}<br /> <b>Company
+					Name:&nbsp;</b> {{p.company.compName}}<br /> <b>Company
+					Password:&nbsp;</b> {{p.company.password}}<br /> <b>Company
+					Email:&nbsp;</b> {{p.company.email}}<br />
+			</div>
+			<br /> <label>Customer Id: <input id="getCust"
+				ng-model="p.CusReq.id" />
+				<button ng-click="p.getCustomer()">GET</button></label>
+			<button ng-click="p.loadCustomers()">Get All Customers</button>
+			<div id="company" ng-repeat="customer in p.allCustomers">
+				<b>Customer Id:&nbsp;</b>{{customer.id}}<br /> <b>Customer
+					Name:&nbsp;</b> {{customer.custName}}<br /> <b>Customer
+					Password:&nbsp;</b> {{customer.password}}<br />
+				<button ng-click="p.removeCustomer(customer)">Remove</button>
+				<button ng-click="p.custUpdate(customer)">Update</button>
+				<div ng-show="customer.edit">
+					<label>New Customer Password: <input
+						ng-model="customer.password" /></label> <label> </label>
+					<button ng-click="p.custInvokeUpdate(customer)">Update -
+						{{customer.custName}}</button>
+					<button ng-click="p.loadCustomersHelper()">Cancel</button>
+				</div>
+			</div>
+			<div ng-show="p.showGetCustomer">
+			<b>Customer Id:&nbsp;</b>{{p.customer.id}}<br /> <b>Customer
+					Name:&nbsp;</b> {{p.customer.custName}}<br /> <b>Customer
+					Password:&nbsp;</b> {{p.customer.password}}<br /></div>
+			<br />
+
+			<hr />
+			<button ng-click="p.logout()">logout</button>
+		</div>
+
+
+		<div ng-show="p.isLoggedInCompany">
+			<h4>Welcome {{p.user.username}}</h4>
+			<button ng-click="p.compCreate()">Create Coupon</button>
+			<br />
+			<div ng-show="p.cCompany">
+				<label> Coupon Title:<input ng-model="p.newCoup.title"><br />
+					Coupon End Date:<input type="date" ng-model="p.newCoup.endDate"><br />
+					Coupon Amount:<input type="number" ng-model="p.newCoup.amount"><br />
+					Choose a Type: <input list="types" placeholder="Choose Type ->" ng-model="p.newCoup.type" /> <datalist
+						id="types">
+						<option value="RESTURANS">
+						<option value="ELECTRICITY">
+						<option value="FOOD">
+						<option value="HEALTH">
+						<option value="SPORTS">
+						<option value="CAMPING">
+						<option value="TRAVELLING">
+					</datalist><br /> Coupon Message:<input ng-model="p.newCoup.message"><br />
+					Coupon Price:<input type="number" placeholder="Price in $" ng-model="p.newCoup.price"><br />
+					Coupon Image:<input type="url" placeholder="Enter Image URL" ng-model="p.newCoup.image"><br />
+					<button ng-click="p.createCoupon(p.newCoup)">Create Coupon:
+						{{coupon.title}}</button>
+				</label>
+			</div>
+			<button ng-click="p.loadCoupons()">Get All Coupons</button>
+			<br />
+			<hr>
+
+			<div class="slider" id="allCompCoup" ng-show="p.allCompanyCouponsDiv"
+				ng-repeat="coupon in p.allCoupons">
+				<div id="coupons">
+					<img src="{{coupon.image}}" width="70" height="80"><br />
+					<h3>
+						<ins>Coupon id:</ins>
+						&nbsp;{{coupon.id}}<br>
+						<ins>Coupon Title:</ins>
+						&nbsp;{{coupon.title}}<br>
+						<ins>Coupon End Date:</ins>
+						&nbsp;{{coupon.endDate}}
+					</h3>
+					<button ng-click="p.moreInfoDiv(coupon)">More info</button>
+					<div class="slider"  ng-show="coupon.moreInfo">
+						<ins>Coupon Start Date:</ins>
+						&nbsp;<b>{{coupon.startDate}}</b><br>
+						<ins>Coupon Amount:</ins>
+						&nbsp;<b>{{coupon.amount}}</b><br>
+						<ins>Coupon Type:</ins>
+						&nbsp;<b>{{coupon.type}}</b><br>
+						<ins>Coupon Message:</ins>
+						&nbsp;<b>{{coupon.message}}</b><br>
+						<ins>Coupon Price:</ins>
+						&nbsp;<b>$ {{coupon.price}}</b>
+					</div>
+
+				</div>
+
+				<button ng-click="p.coupUpdate(coupon)">Update</button>
+				<button ng-click="p.removeCoupon(coupon)">Remove</button>
+				<div ng-show="coupon.edit">
+					<label>New End Date: <input type="date"
+						ng-model="coupon.endDate" /><br /> New price: <input
+						ng-model="coupon.price" /><br /></label>
+					<button ng-click="p.coupInvokeUpdate(coupon)">Update
+						Coupon {{coupon.id}}</button>
+					<button ng-click="p.loadCoupon(coupon)">Refresh Coupon</button>
+
+				</div>
+				<hr>
+			</div>
+
+			Choose a Type: <input placeholder="Choose a Type ->" list="types" ng-model="p.type.type" />
+			<button ng-click="p.comploadTypeCoupons()">Get All Coupons
+				By Type</button>
+			<datalist id="types">
+				<option value="RESTURANS">
+				<option value="ELECTRICITY">
+				<option value="FOOD">
+				<option value="HEALTH">
+				<option value="SPORTS">
+				<option value="CAMPING">
+				<option value="TRAVELLING">
+			</datalist>
+			<div  ng-repeat="coupon in p.compTypeAllCoupons" ng-show="p.getCouponsByTypeDiv">
+				<img src="{{coupon.image}}" width="70" height="80"><br />
+				<h3>
+					<ins>Coupon id:</ins>
+					&nbsp;{{coupon.id}}<br>
+					<ins>Coupon Title:</ins>
+					&nbsp;{{coupon.title}}<br>
+					<ins>Coupon End Date:</ins>
+					&nbsp;{{coupon.endDate}}
+				</h3>
+				<button ng-click="p.moreInfoDiv(coupon)">More info</button>
+				<div id="moreInfo" ng-show="coupon.moreInfo">
+					<ins>Coupon Start Date:</ins>
+					&nbsp;<b>{{coupon.startDate}}</b><br>
+					<ins>Coupon Amount:</ins>
+					&nbsp;<b>{{coupon.amount}}</b><br>
+					<ins>Coupon Type:</ins>
+					&nbsp;<b>{{coupon.type}}</b><br>
+					<ins>Coupon Message:</ins>
+					&nbsp;<b>{{coupon.message}}</b><br>
+					<ins>Coupon Price:</ins>
+					&nbsp;<b>$ {{coupon.price}}</b>
+				</div>
+			<hr>
+			</div>
+			<hr>
+			Search By End Date:<input type="date" ng-model="p.date.date">
+			<button ng-click="p.comploadDateCoupons(p.date)">Get All Coupons
+				By Date</button>
+			<br />
+				<div ng-repeat="coupon in p.compDateAllCoupons" ng-show="p.getCouponsByDateDiv" ><img src="{{coupon.image}}" width="50" height="60"><br />
+				<h3>
+					<ins>Coupon id:</ins>
+					&nbsp;{{coupon.id}}<br>
+					<ins>Coupon Title:</ins>
+					&nbsp;{{coupon.title}}<br>
+					<ins>Coupon End Date:</ins>
+					&nbsp;{{coupon.endDate}}
+				</h3>
+				<button ng-click="p.moreInfoDiv(coupon)">More info</button>
+				<div id="moreInfo" ng-show="coupon.moreInfo">
+					<ins>Coupon Start Date:</ins>
+					&nbsp;<b>{{coupon.startDate}}</b><br>
+					<ins>Coupon Amount:</ins>
+					&nbsp;<b>{{coupon.amount}}</b><br>
+					<ins>Coupon Type:</ins>
+					&nbsp;<b>{{coupon.type}}</b><br>
+					<ins>Coupon Message:</ins>
+					&nbsp;<b>{{coupon.message}}</b><br>
+					<ins>Coupon Price:</ins>
+					&nbsp;<b>$ {{coupon.price}}</b>
+				</div>
+			<hr>
+			</div>
+			<hr>
+			Search By Price:<input type="number" placeholder="Enter a Price" ng-model="p.price.price">
+			<button ng-click="p.comploadPriceCoupons()">Get All Coupons
+				To Price</button>
+			<br />
+				<div ng-repeat="coupon in p.compPriceAllCoupons" ng-show="p.getCouponsByPriceDiv"><img src="{{coupon.image}}" width="50" height="60"><br />
+				<h3>
+					<ins>Coupon id:</ins>
+					&nbsp;{{coupon.id}}<br>
+					<ins>Coupon Title:</ins>
+					&nbsp;{{coupon.title}}<br>
+					<ins>Coupon End Date:</ins>
+					&nbsp;{{coupon.endDate}}
+				</h3>
+				<button ng-click="p.moreInfoDiv(coupon)">More info</button>
+				<div id="moreInfo" ng-show="coupon.moreInfo">
+					<ins>Coupon Start Date:</ins>
+					&nbsp;<b>{{coupon.startDate}}</b><br>
+					<ins>Coupon Amount:</ins>
+					&nbsp;<b>{{coupon.amount}}</b><br>
+					<ins>Coupon Type:</ins>
+					&nbsp;<b>{{coupon.type}}</b><br>
+					<ins>Coupon Message:</ins>
+					&nbsp;<b>{{coupon.message}}</b><br>
+					<ins>Coupon Price:</ins>
+					&nbsp;<b>$ {{coupon.price}}</b>
+				</div>
+			<hr>
+			</div>
+			<hr>
+			<button ng-click="p.logout()">logout</button>
+		</div>
+
+
+
+		<div ng-show="p.isLoggedInCustomer">
+			<h4>Welcome {{p.user.username}}</h4>
+			<button ng-click="p.custloadCoupons()">Get All Coupons</button>
+				<div ng-repeat="coupon in p.custAllCoupons" ng-show="p.custAllCoupDiv">
+			<img src="{{coupon.image}}" width="50" height="60"><br />
+						<h3>
+					<ins>Coupon id:</ins>
+					&nbsp;{{coupon.id}}<br>
+					<ins>Coupon Title:</ins>
+					&nbsp;{{coupon.title}}<br>
+					<ins>Coupon End Date:</ins>
+					&nbsp;{{coupon.endDate}}
+				</h3>
+					<button ng-click="p.pruchaseCoupon(coupon)">Purchase Coupon</button>
+				<button ng-click="p.moreInfoDiv(coupon)">More info</button>
+				<div id="moreInfo" ng-show="coupon.moreInfo">
+					<ins>Coupon Start Date:</ins>
+					&nbsp;<b>{{coupon.startDate}}</b><br>
+					<ins>Coupon Amount:</ins>
+					&nbsp;<b>{{coupon.amount}}</b><br>
+					<ins>Coupon Type:</ins>
+					&nbsp;<b>{{coupon.type}}</b><br>
+					<ins>Coupon Message:</ins>
+					&nbsp;<b>{{coupon.message}}</b><br>
+					<ins>Coupon Price:</ins>
+					&nbsp;<b>$ {{coupon.price}}</b>
+				</div>
+			<hr>
+			</div>
+			<hr>
+			<button ng-click="p.custloadPurchCoupons()">Get All
+				Purchased Coupons</button>
+				<div ng-repeat="coupon in p.custPurchAllCoupons" ng-show="p.custAllPurchDiv" >
+			<img src="{{coupon.image}}" width="50" height="60"><br />
+				<h3>
+					<ins>Coupon id:</ins>
+					&nbsp;{{coupon.id}}<br>
+					<ins>Coupon Title:</ins>
+					&nbsp;{{coupon.title}}<br>
+					<ins>Coupon End Date:</ins>
+					&nbsp;{{coupon.endDate}}
+				</h3>
+				<button ng-click="p.moreInfoDiv(coupon)">More info</button>
+				<div id="moreInfo" ng-show="coupon.moreInfo">
+					<ins>Coupon Start Date:</ins>
+					&nbsp;<b>{{coupon.startDate}}</b><br>
+					<ins>Coupon Amount:</ins>
+					&nbsp;<b>{{coupon.amount}}</b><br>
+					<ins>Coupon Type:</ins>
+					&nbsp;<b>{{coupon.type}}</b><br>
+					<ins>Coupon Message:</ins>
+					&nbsp;<b>{{coupon.message}}</b><br>
+					<ins>Coupon Price:</ins>
+					&nbsp;<b>$ {{coupon.price}}</b>
+				</div>
+			<hr>
+			</div>
+			<hr>
+			Choose a Type: <input list="types" ng-model="p.type.type" />
+			<button ng-click="p.custloadTypeCoupons()">Get All Purchase
+				Coupons By Type</button>
+			<datalist id="types">
+				<option value="RESTURANS">
+				<option value="ELECTRICITY">
+				<option value="FOOD">
+				<option value="HEALTH">
+				<option value="SPORTS">
+				<option value="CAMPING">
+				<option value="TRAVELLING">
+			</datalist>
+				<div ng-repeat="coupon in p.custTypeAllCoupons" ng-show="p.custTypeDiv" ><img src="{{coupon.image}}" width="50" height="60"><br />
+				<h3>
+					<ins>Coupon id:</ins>
+					&nbsp;{{coupon.id}}<br>
+					<ins>Coupon Title:</ins>
+					&nbsp;{{coupon.title}}<br>
+					<ins>Coupon End Date:</ins>
+					&nbsp;{{coupon.endDate}}
+				</h3>
+				<button ng-click="p.moreInfoDiv(coupon)">More info</button>
+				<div id="moreInfo" ng-show="coupon.moreInfo">
+					<ins>Coupon Start Date:</ins>
+					&nbsp;<b>{{coupon.startDate}}</b><br>
+					<ins>Coupon Amount:</ins>
+					&nbsp;<b>{{coupon.amount}}</b><br>
+					<ins>Coupon Type:</ins>
+					&nbsp;<b>{{coupon.type}}</b><br>
+					<ins>Coupon Message:</ins>
+					&nbsp;<b>{{coupon.message}}</b><br>
+					<ins>Coupon Price:</ins>
+					&nbsp;<b>$ {{coupon.price}}</b>
+				</div>
+			<hr>
+			</div>
+			<hr>
+			Enter a Price:<input type="number" ng-model="p.price.price">
+			<button ng-click="p.custloadPriceCoupons()">Get Coupons By
+				Price</button>
+				<div ng-repeat="coupon in p.custPriceAllCoupons" ng-show="p.custPriceDiv" ><img src="{{coupon.image}}" width="50" height="60"><br />
+				<h3>
+					<ins>Coupon id:</ins>
+					&nbsp;{{coupon.id}}<br>
+					<ins>Coupon Title:</ins>
+					&nbsp;{{coupon.title}}<br>
+					<ins>Coupon End Date:</ins>
+					&nbsp;{{coupon.endDate}}
+				</h3>
+				<button ng-click="p.moreInfoDiv(coupon)">More info</button>
+				<div id="moreInfo" ng-show="coupon.moreInfo">
+					<ins>Coupon Start Date:</ins>
+					&nbsp;<b>{{coupon.startDate}}</b><br>
+					<ins>Coupon Amount:</ins>
+					&nbsp;<b>{{coupon.amount}}</b><br>
+					<ins>Coupon Type:</ins>
+					&nbsp;<b>{{coupon.type}}</b><br>
+					<ins>Coupon Message:</ins>
+					&nbsp;<b>{{coupon.message}}</b><br>
+					<ins>Coupon Price:</ins>
+					&nbsp;<b>$ {{coupon.price}}</b>
+				</div>
+			<hr>
+			</div>
+			<hr>
+
+
+			<button ng-click="p.logout()">logout</button>
+		</div>
+
+
+
+		<div>
+			<div ng-show="p.hideLogin" class="infoMessage">{{p.infoMessage}}</div>
+			<div class="errorMessage">{{p.errorMessage}}</div>
+		</div>
+	</div>
+</body>
+</html>

@@ -1,0 +1,106 @@
+.main {
+	color: blue;
+}
+
+.infoMessage {
+	color: green;
+}
+
+.errorMessage{
+	color: red;
+	font-weight: bold;
+}
+
+body{
+	font-family: sans-serif;
+}
+
+button {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    border-radius: 12px;
+    padding: 10px 24px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 10px;
+    margin: 4px 2px;
+    cursor: pointer;
+    transition-duration: 0.4s;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: white;
+    color: black;
+      box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+}
+
+ 
+    
+#loginForm{
+ margin: auto;
+    width: 50%;
+    padding: 10px;
+    text-align: center;
+    }
+    
+    .imgcontainer {
+    text-align: center;
+    
+}
+
+img.avatar {
+    width: 30%;
+    border-radius: 30%;
+}
+
+.container {
+    padding: 50px;
+}
+    
+.container {
+    padding: 50px;
+}
+
+#create{
+	text-align: left;
+}
+
+#company{
+	border-style: groove;
+	text-align: left;
+}
+
+#coupons{
+}
+
+.slider.closed {
+	max-height: 0;
+}
+
+.slider{
+	verflow-y: hidden;
+	max-height: 500px; 
+
+	transition-property: all;
+	transition-duration: .5s;
+	transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
+}
+
+#moreInfo{
+	
+	text-align: left;
+}
+
+div {
+	width: 85%;
+	font-family: sansation;
+	margin: auto;
+	align-content: center;
+	text-align: center;
+    background-color: #f8f8f8;
+    font-size: 16px;
+	
+}
