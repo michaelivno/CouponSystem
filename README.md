@@ -1,2 +1,0 @@
-# CouponSystem
-CouponSystem Project 
